@@ -1,4 +1,3 @@
-import { getSuggestedQuery } from '@testing-library/react';
 import React, { useState } from 'react';
 import { TOKEN_POST, USER_GET } from './api';
 
@@ -15,6 +14,7 @@ export const UserStorage = ({ children }) => {
     const json = await response.json();
     setData(json);
     setLogin(true);
+    console.log(json);
   };
   const userLogin = async (username, password) => {
     const { url, options } = TOKEN_POST({ username, password });
@@ -24,7 +24,7 @@ export const UserStorage = ({ children }) => {
     getUser(token);
   };
   return (
-    <UserContext.Provider value={{ userLogin }}>
+    <UserContext.Provider value={{ userLogin, data }}>
       {children}
     </UserContext.Provider>
   );
