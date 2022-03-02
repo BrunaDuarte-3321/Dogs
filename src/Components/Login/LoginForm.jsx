@@ -1,35 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useForm from '../../Hooks/useForm';
 import Button from '../Forms/Button';
 import Input from '../Forms/Input';
+import { UserContext } from '../../UserContext';
 
 function LoginForm() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const username = useForm();
+  const password = useForm();
 
-  const handleSubmit = (event) => {
+  const { userLogin } = React.useContext(UserContext);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    fetch('https://dogsapi.origamid.dev/json/jwt-auth/v1/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((json) => {
-        console.log(json);
-      });
+    if (username.validate() && password.validate()) {
+      userLogin(username.value, password.value);
+    }
   };
+
   return (
     <section>
       <h1>Login</h1>
       <form action="" onSubmit={handleSubmit}>
-        <Input label="Usuário" type="text" name={'username'} />
-        <Input label="Senha" type="password" name="password" />
+        <Input label="Usuário" type="text" name=" name" {...username} />
+        <Input label="Senha" type="password" name="password" {...password} />
 
         <Button>Entrar</Button>
       </form>
